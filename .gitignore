@@ -6,3 +6,4 @@ vm
 *.pem
 *.exe
 .terraform.lock.hcl
+.terraform.tfstate.lock.info
