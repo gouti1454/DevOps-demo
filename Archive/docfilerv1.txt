@@ -1,0 +1,33 @@
+azureuser@DemoLinux:~/dockerfile$ cat docscript.sh
+#!/bin/bash
+
+# Set the image name and version
+IMAGE_NAME="my-app-02"
+IMAGE_VERSION="2.0"
+
+# Create a new directory for the Dockerfile and build context
+#mkdir -p ${IMAGE_NAME}-${IMAGE_VERSION}
+#cd ${IMAGE_NAME}-${IMAGE_VERSION}
+
+# Create a new Dockerfile
+cat << EOF > Dockerfile
+FROM busybox:latest
+ENV PORT=8000
+LABEL maintainer="Chris <c@crccheck.com>"
+
+# EXPOSE $PORT
+
+HEALTHCHECK CMD nc -z localhost $PORT
+
+# Create a basic webserver and run it until the container is stopped
+CMD echo "httpd started" && trap "exit 0;" TERM INT; httpd -v -p $PORT -h /www -f & wait
+EOF
+# Build the Docker image
+docker build -t ${IMAGE_NAME}:${IMAGE_VERSION} .
+
+# Run the Docker image
+#docker run -p 8079:8000 -d ${IMAGE_NAME}:${IMAGE_VERSION} crccheck/hello-world
+sudo docker run -d --rm --name 01web-test -p 8079:8000 crccheck/hello-world
+sudo docker run -d --rm --name 02web-test -p 8089:8000 crccheck/hello-world
+sudo docker run -d --rm --name 03web-test -p 8099:8000 crccheck/hello-world
+azureuser@DemoLinux:~/dockerfile$
