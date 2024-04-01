@@ -54,7 +54,7 @@ docker build -t ${IMAGE_NAME}:${IMAGE_VERSION} .
 
 # Run the Docker image
 
-cat <<EOF >/home/portdemo/demodocker/docker-compose.yml
+cat <<EOF >/home/adminuser/docker-compose.yml
 version: '3.9'
 services:
   cadvisor:
@@ -93,6 +93,7 @@ services:
       - 8000
 
 EOF
-chown portdemo:portdemo /home/portdemo/demodocker/docker-compose.yml
-sudo /usr/local/bin/docker-compose -f  /home/portdemo/demodocker/docker-compose.yml up -d
-#sudo docker-compose up -d
+chown adminuser:adminuser /home/adminuser/docker-compose.yml
+sudo /usr/local/bin/docker-compose -f  /home/adminuser/docker-compose.yml up -d
+sudo docker-compose ps
+sudo curl ifconfig.me
