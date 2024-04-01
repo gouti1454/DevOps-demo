@@ -92,6 +92,8 @@ services:
     ports:
       - 8000
 
+
+
 EOF
 chown adminuser:adminuser /home/adminuser/docker-compose.yml
 sudo /usr/local/bin/docker-compose -f  /home/adminuser/docker-compose.yml up -d
