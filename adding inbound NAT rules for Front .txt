@@ -1,0 +1,119 @@
+//adding inbound NAT rules for Front end public ip
+resource "azurerm_lb_nat_rule" "Natrule3000" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "RDPAccess"
+  protocol                       = "Tcp"
+  frontend_port                  = 3000
+  backend_port                   = 3000
+  frontend_ip_configuration_name = "frontend-ip"
+}
+
+resource "azurerm_lb_nat_rule" "Natrule9090" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "RDPAccess"
+  protocol                       = "Tcp"
+  frontend_port                  = 9090
+  backend_port                   = 9090
+  frontend_ip_configuration_name = "frontend-ip"
+}
+
+resource "azurerm_lb_nat_rule" "Natrule8080" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "RDPAccess"
+  protocol                       = "Tcp"
+  frontend_port                  = 8080
+  backend_port                   = 8080
+  frontend_ip_configuration_name = "frontend-ip"
+}
+
+resource "azurerm_lb_nat_rule" "Natrule8000" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "RDPAccess"
+  protocol                       = "Tcp"
+  frontend_port                  = 8000
+  backend_port                   = 8000
+  frontend_ip_configuration_name = "frontend-ip"
+}
+
+
+resource "azurerm_lb_nat_rule" "Natrule32770" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "RDPAccess"
+  protocol                       = "Tcp"
+  frontend_port                  = 32770
+  backend_port                   = 32770
+  frontend_ip_configuration_name = "frontend-ip"
+}
+
+resource "azurerm_lb_nat_rule" "Natrule32769" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "RDPAccess"
+  protocol                       = "Tcp"
+  frontend_port                  = 32769
+  backend_port                   = 32769
+  frontend_ip_configuration_name = "frontend-ip"
+}
+
+resource "azurerm_lb_nat_rule" "Natrule32768" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "RDPAccess"
+  protocol                       = "Tcp"
+  frontend_port                  = 32768
+  backend_port                   = 32768
+  frontend_ip_configuration_name = "frontend-ip"
+}
+
+resource "azurerm_lb_nat_rule" "ConnectSSH" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "RDPAccess"
+  protocol                       = "Tcp"
+  frontend_port                  = 22
+  backend_port                   = 22
+  frontend_ip_configuration_name = "frontend-ip"
+}
+
+
+
+
+// adding outbound NAT rule
+resource "azurerm_lb_outbound_rule" "Out443" {
+  name                    = "OutboundRule"
+  loadbalancer_id         = azurerm_lb.app_balancer.id
+  protocol                = "Tcp"
+  backend_address_pool_id = azurerm_lb_backend_address_pool.PoolA.id
+
+  frontend_ip_configuration {
+    name = "frontend-ip"
+  }
+}
+
+//adding inbound rules
+resource "azurerm_network_security_group" "Sec-rule1" {
+  name                = "acceptanceTestSecurityGroup1"
+  location            = azurerm_resource_group.aparito.location
+  resource_group_name = azurerm_resource_group.aparito.name
+
+  security_rule {
+    name                       = "test123"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_ranges    = ["32700-32770", "80", "8080", "3000", "9090"]
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  tags = {
+    environment = "Production"
+  }
+}
