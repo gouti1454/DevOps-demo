@@ -1,3 +1,4 @@
+//archived version
 resource "azurerm_resource_group" "aparito" {
   name     = "aparito-resources"
   location = "UK South"

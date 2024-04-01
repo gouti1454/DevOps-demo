@@ -1,3 +1,4 @@
+//archived version
 terraform {
   required_providers {
     azurerm = {

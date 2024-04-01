@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#//archived version
 #version3
 sudo docker volume prune
 sudo docker container prune
