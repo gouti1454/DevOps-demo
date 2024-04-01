@@ -1,0 +1,1 @@
+//application load balancer added in to the main file vm.tf

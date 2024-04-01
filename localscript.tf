@@ -1,0 +1,1 @@
+//docker scripts added in to the main file vm.tf
