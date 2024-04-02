@@ -143,7 +143,8 @@ resource "azurerm_lb_nat_rule" "inbound_rule_22" {
   frontend_port_start            = 22
   frontend_port_end              = 22
   backend_port                   = 22
-  backend_address_pool_id       = azurerm_lb_backend_address_pool.PoolA.id
+  backend_address_pool_id        = azurerm_lb_backend_address_pool.PoolA.id
+  frontend_ip_configuration_name = "frontend-ip"
   enable_floating_ip             = false
 
   depends_on = [
@@ -162,8 +163,10 @@ resource "azurerm_lb_nat_rule" "inbound_rule_8080" {
   frontend_port_start            = 8080
   frontend_port_end              = 8080
   backend_port                   = 8080
-  backend_address_pool_id       = azurerm_lb_backend_address_pool.PoolA.id
-  enable_floating_ip             = false
+  frontend_ip_configuration_name = "frontend-ip"
+  backend_address_pool_id        = azurerm_lb_backend_address_pool.PoolA.id
+
+  enable_floating_ip = false
 
   depends_on = [
     azurerm_lb.app_balancer,
@@ -180,8 +183,10 @@ resource "azurerm_lb_nat_rule" "inbound_rule_9090" {
   frontend_port_start            = 9090
   frontend_port_end              = 9090
   backend_port                   = 9090
-  backend_address_pool_id       = azurerm_lb_backend_address_pool.PoolA.id
-  enable_floating_ip             = false
+  frontend_ip_configuration_name = "frontend-ip"
+  backend_address_pool_id        = azurerm_lb_backend_address_pool.PoolA.id
+
+  enable_floating_ip = false
 
   depends_on = [
     azurerm_lb.app_balancer,
@@ -198,8 +203,10 @@ resource "azurerm_lb_nat_rule" "inbound_rule_8000" {
   frontend_port_start            = 8000
   frontend_port_end              = 8000
   backend_port                   = 8000
-  backend_address_pool_id       = azurerm_lb_backend_address_pool.PoolA.id
-  enable_floating_ip             = false
+  frontend_ip_configuration_name = "frontend-ip"
+  backend_address_pool_id        = azurerm_lb_backend_address_pool.PoolA.id
+
+  enable_floating_ip = false
 
   depends_on = [
     azurerm_lb.app_balancer,
