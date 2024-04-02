@@ -257,7 +257,7 @@ resource "azurerm_lb_nat_rule" "inbound_rule_32771" {
 resource "azurerm_lb_nat_rule" "inbound_rule_32772" {
   resource_group_name            = azurerm_resource_group.aparito.name
   loadbalancer_id                = azurerm_lb.app_balancer.id
-  name                           = "inbound-rule-32771"
+  name                           = "inbound-rule-32772"
   protocol                       = "Tcp"
   frontend_port_start            = 32772
   frontend_port_end              = 32772

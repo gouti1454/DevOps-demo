@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#version3
+#version6
 sudo docker volume prune
 sudo docker container prune
 sudo rmdir prometheus.yml
@@ -99,3 +99,6 @@ chown adminuser:adminuser /home/adminuser/docker-compose.yml
 sudo /usr/local/bin/docker-compose -f  /home/adminuser/docker-compose.yml up -d
 sudo docker-compose ps
 sudo curl ifconfig.me
+#sudo chmod +x docscript.sh
+#sudo ./docscript.sh
+#sudo docker-compose -up -d
