@@ -132,3 +132,140 @@ resource "azurerm_linux_virtual_machine" "Demoapp" {
     version   = "latest"
   }
 }
+
+# Adding more NAT rules
+resource "azurerm_lb_nat_rule" "inbound_rule" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "inbound-rule"
+  protocol                       = "Tcp"
+  frontend_port                  = 8080
+  backend_port                   = 8080
+  frontend_ip_configuration_name = "frontend-ip"
+  enable_floating_ip             = false
+  depends_on = [
+    azurerm_lb.app_balancer,
+    azurerm_linux_virtual_machine.Demoapp
+  ]
+}
+
+# Adding more NAT rules for the other ports
+resource "azurerm_lb_nat_rule" "inbound_rule_9090" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "inbound-rule-9090"
+  protocol                       = "Tcp"
+  frontend_port                  = 9090
+  backend_port                   = 9090
+  frontend_ip_configuration_name = "frontend-ip"
+  enable_floating_ip             = false
+  depends_on = [
+    azurerm_lb.app_balancer,
+    azurerm_linux_virtual_machine.Demoapp
+  ]
+}
+
+resource "azurerm_lb_nat_rule" "inbound_rule_22" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "inbound-rule-22"
+  protocol                       = "Tcp"
+  frontend_port                  = 22
+  backend_port                   = 22
+  frontend_ip_configuration_name = "frontend-ip"
+  enable_floating_ip             = false
+  depends_on = [
+    azurerm_lb.app_balancer,
+    azurerm_linux_virtual_machine.Demoapp
+  ]
+}
+
+resource "azurerm_lb_nat_rule" "inbound_rule_443" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "inbound-rule-443"
+  protocol                       = "Tcp"
+  frontend_port                  = 443
+  backend_port                   = 443
+  frontend_ip_configuration_name = "frontend-ip"
+  enable_floating_ip             = false
+  depends_on = [
+    azurerm_lb.app_balancer,
+    azurerm_linux_virtual_machine.Demoapp
+  ]
+}
+
+resource "azurerm_lb_nat_rule" "inbound_rule_8000" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "inbound-rule-8000"
+  protocol                       = "Tcp"
+  frontend_port                  = 8000
+  backend_port                   = 8000
+  frontend_ip_configuration_name = "frontend-ip"
+  enable_floating_ip             = false
+  depends_on = [
+    azurerm_lb.app_balancer,
+    azurerm_linux_virtual_machine.Demoapp
+  ]
+}
+
+resource "azurerm_lb_nat_rule" "inbound_rule_3000" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "inbound-rule-3000"
+  protocol                       = "Tcp"
+  frontend_port                  = 3000
+  backend_port                   = 3000
+  frontend_ip_configuration_name = "frontend-ip"
+  enable_floating_ip             = false
+  depends_on = [
+    azurerm_lb.app_balancer,
+    azurerm_linux_virtual_machine.Demoapp
+  ]
+}
+
+resource "azurerm_lb_nat_rule" "inbound_rule_32768" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "inbound-rule-32768"
+  protocol                       = "Tcp"
+  frontend_port                  = 32768
+  backend_port                   = 32768
+  frontend_ip_configuration_name = "frontend-ip"
+  enable_floating_ip             = false
+  depends_on = [
+    azurerm_lb.app_balancer,
+    azurerm_linux_virtual_machine.Demoapp
+  ]
+}
+
+resource "azurerm_lb_nat_rule" "inbound_rule_32769" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "inbound-rule-32769"
+  protocol                       = "Tcp"
+  frontend_port                  = 32769
+  backend_port                   = 32769
+  frontend_ip_configuration_name = "frontend-ip"
+  enable_floating_ip             = false
+  depends_on = [
+    azurerm_lb.app_balancer,
+    azurerm_linux_virtual_machine.Demoapp
+  ]
+}
+
+resource "azurerm_lb_nat_rule" "inbound_rule_32770" {
+  resource_group_name            = azurerm_resource_group.aparito.name
+  loadbalancer_id                = azurerm_lb.app_balancer.id
+  name                           = "inbound-rule-32770"
+  protocol                       = "Tcp"
+  frontend_port                  = 32770
+  backend_port                   = 32770
+  frontend_ip_configuration_name = "frontend-ip"
+  enable_floating_ip             = false
+  depends_on = [
+    azurerm_lb.app_balancer,
+    azurerm_linux_virtual_machine.Demoapp
+  ]
+}
