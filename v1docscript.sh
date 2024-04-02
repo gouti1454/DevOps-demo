@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#version6
-sudo docker volume prune
-sudo docker container prune
-sudo rmdir prometheus.yml
-sudo rm Dockerfile
-sudo rm docker-compose.yml
+#version 8
+#sudo docker volume prune
+#sudo docker container prune
+#sudo rmdir prometheus.yml
+#sudo rm Dockerfile
+#sudo rm docker-compose.yml
 
 sudo apt update
 sudo apt upgrade -y
@@ -97,8 +97,9 @@ services:
 EOF
 chown adminuser:adminuser /home/adminuser/docker-compose.yml
 sudo /usr/local/bin/docker-compose -f  /home/adminuser/docker-compose.yml up -d
-sudo docker-compose ps
+#// creating  porttainer for GUI dashboard
+sudo docker volume create portainer_data
+sudo docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
+#sudo docker-compose ps
+sudo docker ps
 sudo curl ifconfig.me
-#sudo chmod +x docscript.sh
-#sudo ./docscript.sh
-#sudo docker-compose -up -d
