@@ -16,6 +16,9 @@ resource "azurerm_subnet" "SubnetA" {
   virtual_network_name = azurerm_virtual_network.app_network.name
   address_prefixes     = ["10.0.2.0/24"]
 }
+
+
+
 //declaring public ip name
 resource "azurerm_public_ip" "load_ip" {
   name                = "load_ip"
@@ -44,6 +47,56 @@ resource "azurerm_network_interface" "Nic_inter" {
     azurerm_subnet.SubnetA
   ]
 }
+
+
+//adding nsg group :: Network security group example-nsg-1 (attached to subnet: internal)
+resource "azurerm_network_security_group" "NSG-example" {
+  name                = "example-nsg-1"
+  location            = azurerm_resource_group.aparito.location
+  resource_group_name = azurerm_resource_group.aparito.name
+
+  security_rule {
+    name                       = "portssh"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "port3000"
+    priority                   = 110
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "3000"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+}
+
+resource "azurerm_subnet_network_security_group_association" "NSG-subnet-example" {
+  subnet_id                 = azurerm_subnet.SubnetA.id
+  network_security_group_id = azurerm_network_security_group.NSG-example.id
+}
+
+// Ending nsg group : Network security group example-nsg-1 (attached to subnet: internal)
+
+//adding nsg group associ with Network interface
+resource "azurerm_network_interface_security_group_association" "NSG-NIC-example" {
+  network_interface_id      = azurerm_network_interface.Nic_inter.id
+  network_security_group_id = azurerm_network_security_group.NSG-example.id
+}
+//ending - nsg group associ with Network interface
+
+
+
+
 // declaring load balancer
 resource "azurerm_lb" "app_balancer" {
   name                = "app_balancer"
@@ -133,8 +186,9 @@ resource "azurerm_linux_virtual_machine" "example-machine" {
 }
 
 
-//# Adding NAT rules for the ssh22 port
+//# Adding NAT rules for the load balancer and mapping backend pool: ssh22 port
 
+/*
 resource "azurerm_lb_nat_rule" "inbound_rule_22" {
   resource_group_name            = azurerm_resource_group.aparito.name
   loadbalancer_id                = azurerm_lb.app_balancer.id
@@ -152,9 +206,13 @@ resource "azurerm_lb_nat_rule" "inbound_rule_22" {
     azurerm_linux_virtual_machine.example-machine
   ]
 }
+*/
 
-//# Adding more NAT rules for other ports
+
+//# Adding more NAT rules : for the  load balancer and mapping backend pool::  for other ports
 //NAT rule for  cadvisor 8080
+
+/*
 resource "azurerm_lb_nat_rule" "inbound_rule_8080" {
   resource_group_name            = azurerm_resource_group.aparito.name
   loadbalancer_id                = azurerm_lb.app_balancer.id
@@ -173,6 +231,7 @@ resource "azurerm_lb_nat_rule" "inbound_rule_8080" {
     azurerm_linux_virtual_machine.example-machine
   ]
 }
+*/
 
 //NAT rule for  prometheus 9090
 resource "azurerm_lb_nat_rule" "inbound_rule_9090" {
