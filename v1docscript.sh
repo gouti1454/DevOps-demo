@@ -96,7 +96,7 @@ services:
       interval: 10s
       timeout: 3s
       retries: 3
-
+#health check starting healthy unhealthy is displayed against the status under docker ps.
 
 EOF
 chown adminuser:adminuser /home/adminuser/docker-compose.yml
@@ -107,3 +107,6 @@ sudo docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -
 #sudo docker-compose ps
 sudo docker ps
 sudo curl ifconfig.me
+#sudo curl -f http://localhost:32768
+#sudo curl -f http://localhost:32769
+#sudo curl -f http://localhost:32770
