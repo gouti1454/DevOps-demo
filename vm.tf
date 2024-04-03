@@ -30,6 +30,7 @@ resource "azurerm_public_ip" "load_ip" {
     environment = "Production"
   }
 }
+
 // declaring private ip and  commenting the public address since adding front end ip address
 resource "azurerm_network_interface" "Nic_inter" {
   name                = "example-nic"
@@ -47,53 +48,6 @@ resource "azurerm_network_interface" "Nic_inter" {
     azurerm_subnet.SubnetA
   ]
 }
-
-
-//adding nsg group :: Network security group example-nsg-1 (attached to subnet: internal)
-resource "azurerm_network_security_group" "NSG-example" {
-  name                = "example-nsg-1"
-  location            = azurerm_resource_group.aparito.location
-  resource_group_name = azurerm_resource_group.aparito.name
-
-  security_rule {
-    name                       = "portssh"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-
-  security_rule {
-    name                       = "port3000"
-    priority                   = 110
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "3000"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-}
-
-resource "azurerm_subnet_network_security_group_association" "NSG-subnet-example" {
-  subnet_id                 = azurerm_subnet.SubnetA.id
-  network_security_group_id = azurerm_network_security_group.NSG-example.id
-}
-
-// Ending nsg group : Network security group example-nsg-1 (attached to subnet: internal)
-
-//adding nsg group associ with Network interface
-resource "azurerm_network_interface_security_group_association" "NSG-NIC-example" {
-  network_interface_id      = azurerm_network_interface.Nic_inter.id
-  network_security_group_id = azurerm_network_security_group.NSG-example.id
-}
-//ending - nsg group associ with Network interface
-
 
 
 
@@ -185,10 +139,9 @@ resource "azurerm_linux_virtual_machine" "example-machine" {
   }
 }
 
-
+//Starting NAT inbound rules for the LoadBalancer
 //# Adding NAT rules for the load balancer and mapping backend pool: ssh22 port
 
-/*
 resource "azurerm_lb_nat_rule" "inbound_rule_22" {
   resource_group_name            = azurerm_resource_group.aparito.name
   loadbalancer_id                = azurerm_lb.app_balancer.id
@@ -206,13 +159,13 @@ resource "azurerm_lb_nat_rule" "inbound_rule_22" {
     azurerm_linux_virtual_machine.example-machine
   ]
 }
-*/
+
 
 
 //# Adding more NAT rules : for the  load balancer and mapping backend pool::  for other ports
 //NAT rule for  cadvisor 8080
 
-/*
+
 resource "azurerm_lb_nat_rule" "inbound_rule_8080" {
   resource_group_name            = azurerm_resource_group.aparito.name
   loadbalancer_id                = azurerm_lb.app_balancer.id
@@ -231,7 +184,7 @@ resource "azurerm_lb_nat_rule" "inbound_rule_8080" {
     azurerm_linux_virtual_machine.example-machine
   ]
 }
-*/
+
 
 //NAT rule for  prometheus 9090
 resource "azurerm_lb_nat_rule" "inbound_rule_9090" {
@@ -294,14 +247,14 @@ resource "azurerm_lb_nat_rule" "inbound_rule_32770" {
 }
 
 //NAT rule for Docker instance2
-resource "azurerm_lb_nat_rule" "inbound_rule_32771" {
+resource "azurerm_lb_nat_rule" "inbound_rule_32768" {
   resource_group_name            = azurerm_resource_group.aparito.name
   loadbalancer_id                = azurerm_lb.app_balancer.id
-  name                           = "inbound-rule-32771"
+  name                           = "inbound-rule-32768"
   protocol                       = "Tcp"
-  frontend_port_start            = 32771
-  frontend_port_end              = 32771
-  backend_port                   = 32771
+  frontend_port_start            = 32768
+  frontend_port_end              = 32768
+  backend_port                   = 32768
   frontend_ip_configuration_name = "frontend-ip"
   backend_address_pool_id        = azurerm_lb_backend_address_pool.PoolA.id
   enable_floating_ip             = false
@@ -313,14 +266,14 @@ resource "azurerm_lb_nat_rule" "inbound_rule_32771" {
 }
 
 //NAT rule for Docker instance2
-resource "azurerm_lb_nat_rule" "inbound_rule_32772" {
+resource "azurerm_lb_nat_rule" "inbound_rule_32769" {
   resource_group_name            = azurerm_resource_group.aparito.name
   loadbalancer_id                = azurerm_lb.app_balancer.id
-  name                           = "inbound-rule-32772"
+  name                           = "inbound-rule-32769"
   protocol                       = "Tcp"
-  frontend_port_start            = 32772
-  frontend_port_end              = 32772
-  backend_port                   = 32772
+  frontend_port_start            = 32769
+  frontend_port_end              = 32769
+  backend_port                   = 32769
   frontend_ip_configuration_name = "frontend-ip"
   backend_address_pool_id        = azurerm_lb_backend_address_pool.PoolA.id
   enable_floating_ip             = false
@@ -330,3 +283,137 @@ resource "azurerm_lb_nat_rule" "inbound_rule_32772" {
     azurerm_linux_virtual_machine.example-machine
   ]
 }
+
+//Ending NAT inbound rules for the LoadBalancer
+
+// Adding the Inbound rules for VM layer. 
+//adding nsg group :: Network security group example-nsg-1 (attached to subnet: internal)
+resource "azurerm_network_security_group" "NSG-example" {
+  name                = "example-nsg-1"
+  location            = azurerm_resource_group.aparito.location
+  resource_group_name = azurerm_resource_group.aparito.name
+
+  security_rule {
+    name                       = "portssh"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "port3000"
+    priority                   = 110
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "3000"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "port8000"
+    priority                   = 120
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8000"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "port9090"
+    priority                   = 130
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "9090"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "port8080"
+    priority                   = 140
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8080"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+    security_rule {
+    name                       = "port9443"
+    priority                   = 150
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "9443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "port32770"
+    priority                   = 160
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "32770"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "port32769"
+    priority                   = 170
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "32769"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "port32768"
+    priority                   = 180
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "32768"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+}
+
+resource "azurerm_subnet_network_security_group_association" "NSG-subnet-example" {
+  subnet_id                 = azurerm_subnet.SubnetA.id
+  network_security_group_id = azurerm_network_security_group.NSG-example.id
+}
+
+// Ending nsg group : Network security group example-nsg-1 (attached to subnet: internal)
+
+//adding nsg group associ with Network interface
+resource "azurerm_network_interface_security_group_association" "NSG-NIC-example" {
+  network_interface_id      = azurerm_network_interface.Nic_inter.id
+  network_security_group_id = azurerm_network_security_group.NSG-example.id
+}
+//ending - nsg group associ with Network interface
+// Ending the Inbound rules for VM layer. 
