@@ -91,7 +91,11 @@ services:
       replicas: 3
     ports:
       - 8000
-
+    healthcheck:
+      test: curl --fail http://localhost:32769 || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 3
 
 
 EOF
