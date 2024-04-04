@@ -7,3 +7,4 @@ vm
 *.exe
 .terraform.lock.hcl
 .terraform.tfstate.lock.info
+10619_rev1.json
