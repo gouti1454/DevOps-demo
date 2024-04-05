@@ -1,15 +1,17 @@
+
+// Create a resource group
 resource "azurerm_resource_group" "aparito" {
   name     = "aparito-resources"
   location = "UK South"
 }
-//Virtual n/w
+// Create a virtual network
 resource "azurerm_virtual_network" "app_network" {
   name                = "app-network"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.aparito.location
   resource_group_name = azurerm_resource_group.aparito.name
 }
-//subnet
+//Create a subnet
 resource "azurerm_subnet" "SubnetA" {
   name                 = "internal"
   resource_group_name  = azurerm_resource_group.aparito.name
@@ -19,7 +21,7 @@ resource "azurerm_subnet" "SubnetA" {
 
 
 
-//declaring public ip name
+// Declare a public IP address name
 resource "azurerm_public_ip" "load_ip" {
   name                = "load_ip"
   resource_group_name = azurerm_resource_group.aparito.name
@@ -31,7 +33,7 @@ resource "azurerm_public_ip" "load_ip" {
   }
 }
 
-// declaring private ip and  commenting the public address since adding front end ip address
+// Declare a network interface : private ip and  commenting the public address since adding front end ip address
 resource "azurerm_network_interface" "Nic_inter" {
   name                = "example-nic"
   location            = azurerm_resource_group.aparito.location
@@ -51,7 +53,7 @@ resource "azurerm_network_interface" "Nic_inter" {
 
 
 
-// declaring load balancer
+// Declare a load balancer
 resource "azurerm_lb" "app_balancer" {
   name                = "app_balancer"
   location            = azurerm_resource_group.aparito.location
